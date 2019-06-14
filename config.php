@@ -1,0 +1,5 @@
+<?
+
+$editdir = "";
+$password = "";
+$rebuildCmd = "";

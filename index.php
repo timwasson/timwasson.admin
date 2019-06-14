@@ -2,8 +2,9 @@
 
 session_start();
 
+include("config.php");
+
 $action = $_GET['action'];
-$editdir = "../timwasson/src/posts/blog/";
 
 function checkLoggedIn()
 {
@@ -78,7 +79,7 @@ if (empty($action)) {
       </div>
     </nav>
   <? } ?>
-  <section class="hero is-medium is-primary is-bold">
+  <section class="hero is-primary is-bold">
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
@@ -108,6 +109,7 @@ if (empty($action)) {
             if($action == "edit") {
               $myfile = file_get_contents($editdir . $_GET["file"]);
               $filename = $_GET["file"];
+              $nextAction = "save";
             } else {
               $myfile = "---
 permalink: \"blog/[[ slug here]]\"
@@ -117,6 +119,7 @@ date: " . date("Y-m-d") . "
 layout: post.html.hbs
 ---\n";
               $filename = date("Y-m-d") . "-[[ clever-slug-here ]].md";
+              $nextAction = "save-new";
             }
             ?>
             <form action="?action=save" method="post">
@@ -145,7 +148,7 @@ layout: post.html.hbs
           break;
 
         case "auth":
-          if ($_POST['password'] == "test") {
+          if ($_POST['password'] == $password) {
             $_SESSION['loggedin'] = true;
             //echo "authenticated";
             echo "<script>location.href='?action=list';</script>";
@@ -160,8 +163,14 @@ layout: post.html.hbs
         break;
 
         case "save":
-          echo "filename: " . $_POST['filename'];
-          file_put_contents($editdir . $_POST['filename'], $_POST['contents']);
+          if (checkLoggedIn()) {
+            echo "filename: " . $_POST['filename'];
+            file_put_contents($editdir . $_POST['filename'], $_POST['contents']);
+            // Rebuild the site
+            $output = exec($rebuildCmd);
+            //$output = shell_exec('which node');
+            echo "<pre>$output</pre>";
+          }
         break;
       }
       ?>
