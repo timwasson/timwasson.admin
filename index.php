@@ -22,13 +22,7 @@ if (!checkLoggedIn() && $action != "login") {
 }
 */
 
-if (empty($action)) {
-  if (checkLoggedIn() == false) {
-    $action = "login";
-  } else {
-    $action = "list";
-  }
-}
+
 ?>
 
 <!doctype html>
@@ -99,8 +93,12 @@ if (empty($action)) {
           case "list":
 
             // If logged in
-            foreach (glob($editdir . "*") as $file) {
-              echo "<li><a href=\"?action=edit&file=" . basename($file) . "\">" . basename($file) . "</a></li>";
+            if (checkLoggedIn()) {
+              foreach (glob($editdir . "*") as $file) {
+                echo "<li><a href=\"?action=edit&file=" . basename($file) . "\">" . basename($file) . "</a></li>";
+              }
+            } else {
+              echo "<script>location.href='?action=login';</script>";
             }
 
             break;
@@ -154,6 +152,10 @@ layout: post.html.hbs
             echo "<script>location.href='?action=list';</script>";
           } else {
             $_SESSION['loggedin'] = false;
+            echo "<div class=\"notification is-danger\">
+            
+            Wrong pass dummy.
+          </div>";
           }
           break;
 
