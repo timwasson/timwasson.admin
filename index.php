@@ -169,9 +169,7 @@ layout: post.html.hbs
             echo "filename: " . $_POST['filename'];
             file_put_contents($editdir . $_POST['filename'], $_POST['contents']);
             // Rebuild the site
-            $output = exec($rebuildCmd);
-            //$output = shell_exec('which node');
-            echo "<pre>$output</pre>";
+            echo "<pre>" . exec($rebuildCmd) . "</pre>";
           }
         break;
       }
