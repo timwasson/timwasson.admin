@@ -111,10 +111,10 @@ if (!checkLoggedIn() && $action != "login") {
             } else {
               $myfile = "---
 permalink: \"blog/[[ slug here]]\"
-collection: blog
+tags: posts
 title: [[ TITLE ]]
 date: " . date("Y-m-d") . "
-layout: post.html.hbs
+layout: layouts/post.njk
 ---\n";
               $filename = date("Y-m-d") . "-[[ clever-slug-here ]].md";
               $nextAction = "save-new";
